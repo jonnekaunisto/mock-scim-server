@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 export const PostUsersRequestValidator = z.object({
     schemas: z.array(z.string()).nonempty(),
     userName: z.string(),
@@ -14,8 +13,8 @@ export const PostUsersRequestValidator = z.object({
 
 type UserSchema = "urn:ietf:params:scim:schemas:core:2.0:User";
 
-export interface PostUsersResponse {
-    schemas: ["urn:ietf:params:scim:schemas:core:2.0:User"],
+export interface UserResourceResponse {
+    schemas: [UserSchema],
     id: string,
     externalId: string,
     meta: {
@@ -25,7 +24,7 @@ export interface PostUsersResponse {
         location: string,
         version: number,
     },
-    name:{
+    name: {
         formatted: string,
         familyName: string,
         givenName: string,

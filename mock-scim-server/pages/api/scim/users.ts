@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { DAL } from '../../../util/dal';
-import { PostUsersRequestValidator, PostUsersResponse } from '../../../util/model';
+import { DAL } from '../../../database/dal';
+import { PostUsersRequestValidator, UserResourceResponse } from '../../../scim/model';
 
 interface UserResponse {
     schemas: string[],
@@ -27,8 +27,7 @@ export default async function handler(
     const dal = await DAL.create();
 
     if (req.method === 'GET') {
-        const response = getUser(dal);
-        res.status(200).json(response);
+        queryUsers(dal, res);
     } else if (req.method === 'POST') {
         await postUser(dal, req.body, res);
     } else if (req.method === 'PUT') {
@@ -39,7 +38,7 @@ export default async function handler(
     }
 }
 
-function getUser(dal: DAL): UserResponse {
+function queryUsers(dal: DAL, res: NextApiResponse<any>): UserResponse {
     return {
         schemas: ['urn:ietf:params:scim:schemas:core:2.0:User'],
         id: 'id',
@@ -74,7 +73,7 @@ async function postUser(dal: DAL, requestBody: any, res: NextApiResponse<any>) {
             givenName: body.name.givenName,
         })
 
-        const response: PostUsersResponse = {
+        const response: UserResourceResponse = {
             schemas: ['urn:ietf:params:scim:schemas:core:2.0:User'],
             id: user.id,
             externalId: user.externalId,
