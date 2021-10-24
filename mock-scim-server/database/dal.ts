@@ -1,5 +1,5 @@
 import { Low } from "lowdb/lib";
-import { DatabaseSchema, getDataBase, UserSchema } from "./database";
+import { DatabaseSchema, getDataBase, GroupSchema, UserSchema } from "./database";
 import {v4 as uuidv4} from 'uuid';
 
 export interface CreateUserOptions {
@@ -9,6 +9,11 @@ export interface CreateUserOptions {
     familyName: string,
     middleName: string,
     givenName: string,
+}
+
+export interface CreateGroupOptions {
+    displayName: string,
+    members: string[],
 }
 
 export class DAL {
@@ -41,6 +46,21 @@ export class DAL {
             this.db.data.users[userId] = storedUser;
             await this.db.write()
             return storedUser;
+        }
+        console.log('WARNING: DB IS NOT INITIALIZED')
+        throw Error('DB is not initialized');
+    }
+
+    public async createGroup(group: CreateGroupOptions): Promise<GroupSchema> {
+        if (this.db.data != null) {
+            let groupId = uuidv4();
+            const storedGroup: GroupSchema = {
+                id: groupId,
+                ...group
+            }
+            this.db.data.groups[groupId] = storedGroup;
+            await this.db.write()
+            return storedGroup;
         }
         console.log('WARNING: DB IS NOT INITIALIZED')
         throw Error('DB is not initialized');
