@@ -18,7 +18,18 @@ export interface UserSchema {
 }
 
 export interface GroupSchema {
-    
+    id: string,
+    displayName: string,
+    members: string[],
+    /*
+    meta: {
+        resourceType: string,
+        created: string,
+        lastModified: string,
+        version: number,
+        location: string
+    }
+    */
 }
 
 export async function getDataBase(): Promise<Low<DatabaseSchema>> {

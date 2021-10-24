@@ -31,3 +31,16 @@ export interface UserResourceResponse {
     },
     userName: string,
 }
+
+export const PostGroupsRequestValidator = z.object({
+    schemas: z.array(z.string()).nonempty(),
+    displayName: z.string(),
+});
+
+type GroupSchema = "urn:ietf:params:scim:schemas:core:2.0:Group";
+
+export interface GroupResourceResponse {
+    schemas: [GroupSchema],
+    id: string,
+    displayName: string,
+}
